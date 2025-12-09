@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { CreateTaskRequest, Task } from '../types/task';
 
-// UPDATE THIS to match your Spring Boot Controller path
+// URL of the Spring Boot backend API
 const API_URL = 'http://localhost:8080/api/v1/tasks';
 
 export const api = {
@@ -17,10 +17,15 @@ export const api = {
     return data;
   },
 
-  // Mark task as done (Using PATCH or PUT based on your Spring Boot)
+  // Mark task as done 
   markDone: async (id: string) => {
     // Assuming your Spring Boot endpoint is /tasks/{id}/done
-    const { data } = await axios.patch<void>(`${API_URL}/${id}/done`);
+    const { data } = await axios.put<void>(`${API_URL}/${id}/done`);
     return data;
+  },
+  //update task
+   update: async (id: string, data: CreateTaskRequest) => {
+    const response = await axios.put<Task>(`${API_URL}/${id}`, data);
+    return response.data;
   }
 };
