@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.backend.app.dto.ErrorMsg;
 import com.backend.app.dto.ErrorResponse;
-
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2

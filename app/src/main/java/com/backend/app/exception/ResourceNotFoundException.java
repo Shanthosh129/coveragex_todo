@@ -3,6 +3,7 @@ package com.backend.app.exception;
 import java.util.List;
 import com.backend.app.dto.ErrorMsg;
 import lombok.Getter;
+
 @Getter
 public class ResourceNotFoundException extends RuntimeException {
     private final String requestId;
