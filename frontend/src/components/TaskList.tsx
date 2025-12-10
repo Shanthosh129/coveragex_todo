@@ -2,7 +2,7 @@ import { useState } from 'react'; // Import useState
 import { Check, Clock, Edit2 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../apis/api';
-import { Card } from './card';
+import { Card } from './Card';
 import { Modal } from './Modal'; // Import Modal
 import { EditTaskForm } from './EditTaskForm'; // Import EditForm
 import type{ Task } from '../types/task';

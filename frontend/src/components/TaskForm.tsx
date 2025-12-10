@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { Plus, Type, AlignLeft } from 'lucide-react';
-import { Card } from './card';
+import { Card } from './Card';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../apis/api';
 import type{ CreateTaskRequest } from '../types/task';
