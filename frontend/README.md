@@ -1,73 +1,74 @@
-# React + TypeScript + Vite
+#  Full Stack To-Do Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to my submission for the Full Stack Engineer Assessment! 
 
-Currently, two official plugins are available:
+This is a containerized web application built to manage daily tasks efficiently. It features a modern, responsive UI with Dark Mode support, a robust Spring Boot backend, and a MySQL database—all orchestrated via Docker.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
+## Quick Start (The Only Step You Need)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+You do **not** need Java, Node.js, or MySQL installed on your machine. You only need **Docker**.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. **Clone the repository** (if you haven't already).
+2. Open your terminal in the project root folder.
+3. Run the application:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+docker-compose up --build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Once the containers are running, access the components here:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+| Component | URL | Notes |
+|---|---|---|
+| Frontend UI | http://localhost | The React Application (Served via Nginx) |
+| Backend API | http://localhost:8080/api/v1/tasks | The Spring Boot REST API |
+| Database | localhost:3307 | Access via Workbench |
+
+### Architecture & Tech Stack
+
+The application follows a Clean Architecture principle with a strict separation of concerns:
+
+1. **Frontend (Client)**
+   - Tech: React (TypeScript), Vite, Tailwind CSS.
+   - Highlights:
+     - Uses React Query for state management and caching.
+     - Framer Motion for smooth animations.
+     - Fully responsive "Split-Screen" layout.
+     - Dark/Light Mode support (persisted in LocalStorage).
+     - Production Build: Served via Nginx (Alpine Linux) for high performance.
+2. **Backend (Server)**
+   - Tech: Java 21, Spring Boot 3.x.
+   - Highlights:
+     - Layered Architecture: Controller -> Service -> Repository.
+     - REST API: Follows standard HTTP methods (GET, POST, PUT).
+     - Security: CORS configured to allow communication with the Nginx frontend.
+     - Validation: Strict input validation using Jakarta Validation (@NotBlank).
+3. **Database (Persistence)**
+   - Tech: MySQL 8.0.
+   - Highlights:
+     - Data persistence using Docker Volumes (data survives container restarts).
+     - Hibernate/JPA automatically manages the schema (ddl-auto: update).
+
+### Feature Checklist
+
+This submission covers all requirements listed in the assessment:
+
+- **Create Tasks:** Users can add a title and description.
+- **Recent Tasks Only:** The UI strictly displays the top 5 most recent tasks.
+- **Mark as Done:** Completed tasks are removed from the view.
+-  **Update Task:** Users can modify existing tasks.
+- **Dockerized:** The entire stack runs with `docker-compose`.
+- **REST API:** Backend exposes a RESTful API.
+- **Unit & Integration Tests:** Backend tests using JUnit and MockMvc.
+- **Clean Code:** TypeScript interfaces match Java DTOs; logic is separated from UI.
+
+Extra Marks:
+
+- **Pretty UI:** Glassmorphism design, empty states, and animations.
+- **Dark Mode:** Fully supported.
