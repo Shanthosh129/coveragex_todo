@@ -33,12 +33,12 @@ class TaskControllerTest {
     void testCreateTask() throws Exception {
         TaskRequest request = new TaskRequest("Sample Task", "This is a sample task description");
         TaskResponse res = new TaskResponse(1L, "Sample Task", "This is a sample task description", null);
-        when(service.create(request, "test-req-id")).thenReturn(res);
+        when(service.create(eq(request), anyString())).thenReturn(res);
         mockMvc.perform(post("/api/v1/tasks")
                 .contentType("application/json")
                 .content(mapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Task created successfully"));
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title").value("Sample Task"));
 
     }
 
@@ -63,6 +63,6 @@ class TaskControllerTest {
                 .contentType("application/json")
                 .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Task updated successfully"));
+                .andExpect(jsonPath("$.title").value("Updated Task"));
     }
 }
