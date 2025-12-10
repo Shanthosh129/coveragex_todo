@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.backend.app.dto.SuccessMessage;
 import com.backend.app.dto.TaskRequest;
 import com.backend.app.dto.TaskResponse;
+import com.backend.app.entity.Task;
 import com.backend.app.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +34,11 @@ public class TaskController {
     @PostMapping(
     consumes = MediaType.APPLICATION_JSON_VALUE,
     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SuccessMessage> create(@RequestBody @Valid TaskRequest request) {
+    public ResponseEntity<TaskResponse> create(@RequestBody @Valid TaskRequest request) {
         String requestId = UUID.randomUUID().toString();
         log.info("Creating task with requestId: {}", requestId);
-        service.create(request, requestId);
-        SuccessMessage successResponse = new SuccessMessage("Task created successfully", requestId);
-        return new ResponseEntity<>(successResponse,HttpStatus.OK);
+        TaskResponse response = service.create(request, requestId);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -65,11 +65,10 @@ public class TaskController {
     }
 
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SuccessMessage> updateTask(@PathVariable Long id, @RequestBody @Valid TaskRequest request) {
+    public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @RequestBody @Valid TaskRequest request) {
         String requestId = UUID.randomUUID().toString();
         log.info("Updating task {} with requestId: {}", id, requestId);
-        service.updateTask(id, request, requestId);
-        SuccessMessage successResponse = new SuccessMessage("Task updated successfully", requestId);
-        return new ResponseEntity<>(successResponse, HttpStatus.OK);
+        TaskResponse response = service.updateTask(id, request, requestId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

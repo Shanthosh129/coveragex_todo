@@ -14,7 +14,6 @@ import com.backend.app.dto.TaskResponse;
 import com.backend.app.entity.Task;
 import com.backend.app.repository.TaskRepository;
 import com.backend.app.service.TaskService;
-import org.springframework.dao.DataAccessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 @Log4j2
@@ -28,6 +27,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponse create(TaskRequest request, String requestId) {
         List<ErrorMsg> errors = new ArrayList<>();
         try {
+            log.info("Creating task with title: {} for requestId: {}", request.title(), requestId);
             if (request.title() == null || request.title().isBlank()) {
                 errors.add(new ErrorMsg(1001, "Title is required"));
                 throw new ValidationException(errors, requestId);
@@ -53,6 +53,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskResponse> getRecentTasks(String requestId) {
         try {
+            log.info("Fetching recent tasks for requestId: {}", requestId);
             return repository.findTop5ByCompletedFalseOrderByCreatedAtDesc()
                 .stream()
                 .map(this::mapToResponse)
@@ -68,6 +69,7 @@ public class TaskServiceImpl implements TaskService {
     public void markAsDone(Long id,String requestId) {
         List<ErrorMsg> errors = new ArrayList<>();
         try {
+            log.info("Marking task {} as done for requestId: {}", id, requestId);
             if (id == null || id <= 0) {
                 errors.add(new ErrorMsg(1002, "Invalid task id"));
                 throw new ValidationException(errors, requestId);
@@ -94,6 +96,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskResponse getTask(Long id, String requestId) {
         try {
+            log.info("Fetching task {} for requestId: {}", id, requestId);
             if (id == null || id <= 0) {
                 throw new ValidationException(List.of(new ErrorMsg(1002, "Invalid task id")), requestId);
             }
@@ -117,6 +120,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponse updateTask(Long id, TaskRequest request, String requestId) {
         List<ErrorMsg> errors = new ArrayList<>();
         try {
+            log.info("Updating task {} with title: {} for requestId: {}", id, request.title(), requestId);
             if (id == null || id <= 0) {
                 errors.add(new ErrorMsg(1002, "Invalid task id"));
                 throw new ValidationException(errors, requestId);

@@ -4,22 +4,32 @@ import { Card } from './card';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../apis/api';
 import type{ CreateTaskRequest } from '../types/task';
+import { useState } from 'react';
+import ErrorCard from './ErrorCard';
 
 export const TaskForm = () => {
   const queryClient = useQueryClient();
   const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateTaskRequest>();
+
+  const [serverError, setServerError] = useState<string[] | null>(null);
 
   const mutation = useMutation({
     mutationFn: api.create,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
       reset();
+      setServerError(null);
     },
+    onError: (err: any) => {
+      if (err && Array.isArray(err.messages)) setServerError(err.messages);
+      else setServerError([String(err)]);
+    }
   });
 
   return (
     <Card className="p-8 bg-white dark:bg-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-black/20">
       <form onSubmit={handleSubmit((d) => mutation.mutate(d))} className="space-y-6">
+        {serverError && <ErrorCard messages={serverError} />}
         
         {/* Title Input */}
         <div className="space-y-2">

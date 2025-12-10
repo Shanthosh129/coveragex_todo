@@ -2,6 +2,8 @@ import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../apis/api';
 import type{ Task, CreateTaskRequest } from '../types/task';
+import { useState } from 'react';
+import ErrorCard from './ErrorCard';
 
 interface Props {
   task: Task;
@@ -22,12 +24,19 @@ export const EditTaskForm = ({ task, onClose }: Props) => {
     mutationFn: (data: CreateTaskRequest) => api.update(task.id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
-      onClose(); // Close modal on success
+      onClose(); 
     },
+    onError: (err: any) => {
+      if (err && Array.isArray(err.messages)) setServerError(err.messages);
+      else setServerError([String(err)]);
+    }
   });
+
+  const [serverError, setServerError] = useState<string[] | null>(null);
 
   return (
     <form onSubmit={handleSubmit((data) => mutation.mutate(data))} className="space-y-4">
+      {serverError && <ErrorCard messages={serverError} />}
       <div className="space-y-1">
         <label className="text-xs font-semibold text-slate-500 uppercase">Title</label>
         <input

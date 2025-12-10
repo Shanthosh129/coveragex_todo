@@ -22,8 +22,7 @@ export const TaskList = () => {
   if (isLoading) return <div className="text-center p-10 text-slate-400 animate-pulse">Loading tasks...</div>;
 
   if (!tasks || tasks.length === 0) {
-    // ... (Keep your existing Empty State code here) ...
-    return <div>No Tasks</div>; // Placeholder for brevity
+    return <div>No Tasks</div>; // Placeholder
   }
 
   return (
@@ -40,10 +39,10 @@ export const TaskList = () => {
               layout
               // ADD CLICK HANDLER TO OPEN MODAL
               onClick={() => setEditingTask(task)}
-              className="cursor-pointer" // Add cursor pointer
+              className="cursor-pointer" 
             >
               <Card className="group hover:border-indigo-400 dark:hover:border-indigo-500 transition-all duration-300 relative overflow-hidden">
-                {/* Optional: Add a subtle edit hint overlay on hover */}
+                
                 <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400">
                   <Edit2 size={12} />
                 </div>
@@ -66,7 +65,7 @@ export const TaskList = () => {
 
                   <button
                     onClick={(e) => {
-                      e.stopPropagation(); // <--- CRITICAL: Stops modal from opening
+                      e.stopPropagation(); 
                       mutation.mutate(task.id);
                     }}
                     className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-sm font-medium hover:bg-green-500 hover:text-white dark:hover:bg-green-600 transition-all duration-300 shadow-sm z-10"
