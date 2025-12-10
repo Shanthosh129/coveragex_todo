@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import type { CreateTaskRequest, Task } from '../types/task';
 
 // URL of the Spring Boot backend API
-const API_URL = 'http://localhost:8080/api/v1/tasks';
+const API_URL = '/api/v1/tasks';
 
 // Helper to normalize backend error responses (your backend returns { errors: [{code,message}], requestId })
 function normalizeAxiosError(err: unknown) {

@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # 1. Database Service
+  mysql:
+    image: mysql:8.0
+    container_name: task-db
+    restart: always
+    environment:
+      
+      MYSQL_DATABASE: to_do
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    # Strong healthcheck to prevent "Connection Refused"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -prootpassword || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # 2. Backend Service
+  backend:
+    build: ./app  # Points to your Spring Boot folder
+    container_name: task-backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      # MAPPING TO YOUR APPLICATION.PROPERTIES VARIABLES:
+      DB_HOST: mysql           # The service name defined above
+      DB_PORT: 3306
+      DB_NAME: to_do           # Matches your DB name
+      DB_USER: root
+      DB_PASSWORD: rootpassword # Matches the MYSQL_ROOT_PASSWORD above
+      
+      # Hibernate Settings
+      JPA_DDL_AUTO: update
+      JPA_SHOW_SQL: "true"
+    ports:
+      - "8080:8080"
+
+  # 3. Frontend Service
+  frontend:
+    build: ./frontend
+    container_name: task-frontend
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  mysql_data:

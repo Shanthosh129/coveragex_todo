@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 export const ErrorCard = ({ title = 'Error', messages = [] as string[] }: { title?: string; messages?: string[] }) => {
   if (!messages || messages.length === 0) return null;
